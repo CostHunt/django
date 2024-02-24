@@ -11,7 +11,6 @@ python manage.py collectstatic --no-input
 # apply any database migrations that are outstanding
 python manage.py makemigrations
 
-python manage.py showmigrations
 
 # apply any database migrations that are outstanding
 python manage.py migrate
