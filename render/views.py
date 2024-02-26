@@ -55,6 +55,15 @@ class FileUploadAPIView(APIView):
         return Response({"error": "File not provided"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class FileURLAPIView(APIView):
+    def get(self, request, file_name):
+        storage_path = f"files/{file_name}"
+
+        try:
+            file_url = storage.child(storage_path).get_url(None)
+            return Response({'file_url': file_url, 'file_name': file_name}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e), 'file_name': file_name}, status=status.HTTP_404_NOT_FOUND)
 # Create your views here.
 def index(request):
     return render(request, 'render/index.html', {})
