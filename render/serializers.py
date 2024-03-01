@@ -71,7 +71,7 @@ class AppartenirSerializer(serializers.ModelSerializer):
     role = RoleSerializer(read_only=True)
     username = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='user', write_only=True)
     groupe_id = serializers.PrimaryKeyRelatedField(queryset=Groupe.objects.all(), source='groupe', write_only=True)
-    role_id = serializers.PrimaryKeyRelatedField(queryset=Groupe.objects.all(), source='role', write_only=True)
+    role_id = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all(), source='role', write_only=True)
     class Meta:
         model = Appartenir
         fields = ('id_groupe','username','code_role', 'groupe', 'user', 'role', 'createdAt', 'updatedAt')
@@ -79,17 +79,17 @@ class AppartenirSerializer(serializers.ModelSerializer):
 class AttacherSerializer(serializers.ModelSerializer):
     message = MessageSerializer(read_only=True)
     attachedfile = AttachedFileSerializer(read_only=True)
-    id_message = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='message', write_only=True)
-    id_file = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='attachedfile', write_only=True)
+    id_message = serializers.PrimaryKeyRelatedField(queryset=Message.objects.all(), source='message', write_only=True)
+    id_file = serializers.PrimaryKeyRelatedField(queryset=AttachedFile.objects.all(), source='attachedfile', write_only=True)
     class Meta:
         model = Attacher
         fields = ('id_message','id_file', 'message', 'attachedfile', 'createdAt', 'updatedAt')
 
 class ContenirSerializer(serializers.ModelSerializer):
     post = PostSerializer(read_only=True)
-    post_id = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all(), source='post', write_only=True)
     attachedfile = AttachedFileSerializer(read_only=True)
-    id_file = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='attachedfile', write_only=True)
+    post_id = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all(), source='post', write_only=True)
+    id_file = serializers.PrimaryKeyRelatedField(queryset=AttachedFile.objects.all(), source='attachedfile', write_only=True)
     class Meta:
         model = Contenir
         fields = ('id_post','id_file','post','attachedfile', 'createdAt', 'updatedAt')
