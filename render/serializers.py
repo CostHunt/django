@@ -47,9 +47,13 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ('id_comment', 'username', 'user', 'id_post', 'post', 'contenu', 'createdAt','updatedAt')
 
 class MessageSerializer(serializers.ModelSerializer):
+    groupe = GroupeSerializer(read_only=True)
+    user = UserSerializer(read_only=True)
+    username = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='user', write_only=True)
+    groupe_id = serializers.PrimaryKeyRelatedField(queryset=Groupe.objects.all(), source='groupe', write_only=True)
     class Meta:
         model = Message
-        fields = ('id_message','id_groupe', 'username', 'contenu', 'date_envoie', 'createdAt', 'updatedAt')
+        fields = ('id_message','id_groupe', 'username', 'contenu', 'groupe','user', 'date_envoie', 'createdAt', 'updatedAt')
 
 class AttachedFileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -62,16 +66,30 @@ class RoleSerializer(serializers.ModelSerializer):
         fields = ('code_role','libelle_role', 'createdAt', 'updatedAt')
 
 class AppartenirSerializer(serializers.ModelSerializer):
+    groupe = GroupeSerializer(read_only=True)
+    user = UserSerializer(read_only=True)
+    role = RoleSerializer(read_only=True)
+    username = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='user', write_only=True)
+    groupe_id = serializers.PrimaryKeyRelatedField(queryset=Groupe.objects.all(), source='groupe', write_only=True)
+    role_id = serializers.PrimaryKeyRelatedField(queryset=Groupe.objects.all(), source='role', write_only=True)
     class Meta:
         model = Appartenir
-        fields = ('id_groupe','username','code_role', 'createdAt', 'updatedAt')
+        fields = ('id_groupe','username','code_role', 'groupe', 'user', 'role', 'createdAt', 'updatedAt')
 
 class AttacherSerializer(serializers.ModelSerializer):
+    message = MessageSerializer(read_only=True)
+    attachedfile = AttachedFileSerializer(read_only=True)
+    id_message = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='message', write_only=True)
+    id_file = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='attachedfile', write_only=True)
     class Meta:
         model = Attacher
-        fields = ('id_message','id_file', 'createdAt', 'updatedAt')
+        fields = ('id_message','id_file', 'message', 'attachedfile', 'createdAt', 'updatedAt')
 
 class ContenirSerializer(serializers.ModelSerializer):
+    post = PostSerializer(read_only=True)
+    post_id = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all(), source='post', write_only=True)
+    attachedfile = AttachedFileSerializer(read_only=True)
+    id_file = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='attachedfile', write_only=True)
     class Meta:
         model = Contenir
-        fields = ('id_post','id_file', 'createdAt', 'updatedAt')
+        fields = ('id_post','id_file','post','attachedfile', 'createdAt', 'updatedAt')
