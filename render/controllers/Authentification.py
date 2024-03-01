@@ -58,7 +58,8 @@ def Signup (request):
             token = jwt.encode(
                 {
                     'username': user.username,
-                    "name": user.name,
+                    "nom": user.nom,
+                    "prenoms":user.prenoms,
                     'email': user.email,
                     'exp': expiration_time,
                 },
