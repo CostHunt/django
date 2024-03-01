@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import  User
+from .models import  User, Groupe, Post, Comment
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,3 +16,26 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
+class GroupeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Groupe
+        fields = ('id_groupe', 'nom_groupe', 'createdAt', 'updatedAt')
+
+class PostSerializer(serializers.ModelSerializer):
+    groupe = GroupeSerializer(read_only=True)
+    user = UserSerializer(read_only=True)
+    username = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='user', write_only=True)
+    groupe_id = serializers.PrimaryKeyRelatedField(queryset=Groupe.objects.all(), source='groupe', write_only=True)
+    class Meta:
+        model = Post
+        fields = ('id_post', 'id_groupe','user', 'groupe', 'username', 'description', 'createdAt', 'updatedAt')
+
+class CommentSerializer(serializers.ModelSerializer):
+    post = PostSerializer(read_only=True)
+    user = UserSerializer(read_only=True)
+    username = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='user', write_only=True)
+    post_id = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all(), source='post', write_only=True)
+    class Meta:
+        model = Comment
+        fields = ('id_comment', 'username', 'user', 'id_post', 'post', 'contenu', 'createdAt','updatedAt')

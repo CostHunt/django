@@ -23,19 +23,19 @@ class Groupe(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now_add=True)
 
-class Comment(models.Model):
-    id_comment =  models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    username = models.ForeignKey(User, on_delete=models.CASCADE)
-    id_post = models.ForeignKey('Post', on_delete=models.CASCADE)
-    contenu = models.CharField(max_length=32, null=True)
-    createdAt = models.DateTimeField(auto_now_add=True)
-    updatedAt = models.DateTimeField(auto_now_add=True)
-
 class Post(models.Model):
     id_post =  models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     id_groupe = models.ForeignKey(Groupe, on_delete=models.CASCADE)
     username = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.CharField(max_length=32, null=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now_add=True)
+
+class Comment(models.Model):
+    id_comment =  models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    username = models.ForeignKey(User, on_delete=models.CASCADE)
+    id_post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    contenu = models.CharField(max_length=32, null=True)
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now_add=True)
 
