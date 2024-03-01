@@ -7,8 +7,7 @@ import jwt
 from datetime import datetime, timedelta
 from render.models import User
 from render.serializers import UserSerializer
-
-SECRET_KEY = '!&costhunt2024'
+from mysite.settings import SECRET_KEY
 
 @api_view(['GET', 'POST'])
 def Login(request):
@@ -19,11 +18,7 @@ def Login(request):
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
-            return JsonResponse({
-                'error': 'Invalid username',
-                'status': 400,
-                'message': 'Bad request'
-                }, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'error': 'Invalid username',}, status=status.HTTP_400_BAD_REQUEST)
         
         if user.check_password(password):
             expiration_time = datetime.utcnow() + timedelta(seconds=20)
@@ -32,18 +27,13 @@ def Login(request):
                     'username': user.username,
                     "name": user.name,
                     'email': user.email,
-                    'isAdmin': True,
                     'exp': expiration_time,
                 },
                 SECRET_KEY,
                 algorithm='HS256' 
                 )
-            return Response({'user_info': token}, status=status.HTTP_200_OK)
-        return JsonResponse({
-            'error': 'Invalid password',
-            'status': 400,
-            'message': 'Bad request'
-            }, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'token': token}, status=status.HTTP_200_OK)
+        return JsonResponse({'error': 'Invalid password',}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
@@ -53,9 +43,9 @@ def Decode (request):
         token = request_data.get('token')
         try:
             decoded_token = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
-            return Response({'user_info': decoded_token}, status=status.HTTP_200_OK)
+            return Response({'user': decoded_token}, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({'Error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
 def Signup (request):
