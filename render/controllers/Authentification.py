@@ -25,9 +25,12 @@ def Login(request):
             token = jwt.encode(
                 {
                     'username': user.username,
-                    "name": user.name,
+                    'matricule':user.matricule,
+                    'nom': user.nom,
+                    'prenoms':user.prenoms,
                     'email': user.email,
                     'exp': expiration_time,
+
                 },
                 SECRET_KEY,
                 algorithm='HS256' 
@@ -58,8 +61,9 @@ def Signup (request):
             token = jwt.encode(
                 {
                     'username': user.username,
-                    "nom": user.nom,
-                    "prenoms":user.prenoms,
+                    'nom': user.nom,
+                    'matricule':user.matricule,
+                    'prenoms':user.prenoms,
                     'email': user.email,
                     'exp': expiration_time,
                 },
@@ -70,3 +74,14 @@ def Signup (request):
             response_data["token"] = token
             return Response(response_data, status=status.HTTP_201_CREATED)
         return JsonResponse({'errors': serializerUser.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+def validateToken(request):
+    token_key_header = request.headers.get('X-access-token')
+    if token_key_header:
+        try:
+            jwt.decode(token_key_header, SECRET_KEY, algorithms=['HS256'])
+            return True
+        except:
+            return False
+    else:
+        return False
