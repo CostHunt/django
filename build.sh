@@ -8,9 +8,6 @@ pip install -r requirements.txt
 # convert our static asset files on Render
 python manage.py collectstatic --no-input
 
-# apply any database migrations that are outstanding
-python manage.py makemigrations
-
 
 # apply any database migrations that are outstanding
 python manage.py migrate
