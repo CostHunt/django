@@ -1,5 +1,11 @@
 from rest_framework import serializers
 from .models import  User, Groupe, Post, Comment
+from .models import  Message
+from .models import  AttachedFile
+from .models import  Role
+from .models import  Appartenir
+from .models import  Attacher
+from .models import  Contenir
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,3 +45,33 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ('id_comment', 'username', 'user', 'id_post', 'post', 'contenu', 'createdAt','updatedAt')
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ('id_message','id_groupe', 'username', 'contenu', 'date_envoie', 'createdAt', 'updatedAt')
+
+class AttachedFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AttachedFile
+        fields = ('id_file','nomfichier', 'path', 'createdAt', 'updatedAt')
+
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = ('code_role','libelle_role', 'createdAt', 'updatedAt')
+
+class AppartenirSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Appartenir
+        fields = ('id_groupe','username','code_role', 'createdAt', 'updatedAt')
+
+class AttacherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attacher
+        fields = ('id_message','id_file', 'createdAt', 'updatedAt')
+
+class ContenirSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contenir
+        fields = ('id_post','id_file', 'createdAt', 'updatedAt')
