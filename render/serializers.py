@@ -10,7 +10,7 @@ from .models import  Contenir
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id','username','name','image','email','password','createdAt','updatedAt')
+        fields = ('username','nom','prenoms','image','email','password','createdAt','updatedAt')
         extra_kwargs = {
             'password': { 'write_only': True}
         }
